@@ -8,7 +8,9 @@ from rest_framework import status
 @api_view(['POST'])
 def download_yt_url(request):
     # Get the 'url' parameter from the request data
+    
     url = request.data.get('url', None)
+    print("Trying this:")
 
     if not url:
         return Response({'error': 'URL parameter is missing'}, status=status.HTTP_400_BAD_REQUEST)
