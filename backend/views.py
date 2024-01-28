@@ -73,16 +73,16 @@ def download_yt_url(request):
 
         for stream in yt.streams:
             # Filter streams based on mime_type
-            if stream.mime_type.startswith('video/mp4') or stream.mime_type.startswith('audio/mp4'):
-                stream_info = {
-                    'url': stream.url,
-                    'itag': stream.itag,
-                    'mime_type': stream.mime_type,
-                    'resolution': stream.resolution,
-                    'audio_res': stream.abr,
-                    'size': stream.filesize,  # Size of the video
-                }
-                video_info['streams'].append(stream_info)
+            # if stream.mime_type.startswith('video/mp4') or stream.mime_type.startswith('audio/mp4'):
+            stream_info = {
+                'url': stream.url,
+                'itag': stream.itag,
+                'mime_type': stream.mime_type,
+                'resolution': stream.resolution,
+                'audio_res': stream.abr,
+                'size': stream.filesize,  # Size of the video
+            }
+            video_info['streams'].append(stream_info)
 
         return Response(video_info)
 
