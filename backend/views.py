@@ -89,6 +89,7 @@ def download_yt_url(request):
                 'mime_type': item['mime_type'],
                 'resolution': item['resolution'],
                 'audio_res': item['abr'],
+                'size': stream.filesize,
             }
             video_info['streams'].append(selected_item)
 
