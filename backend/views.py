@@ -87,8 +87,8 @@ def download_yt_url(request):
                 'itag': item['itag'],
                 'mime_type': item['mime_type'],
                 'resolution': item['resolution'],
-                'audio_res': item['abr'] if item['abr'] != None else video_info['streams'][0]['audio_res'],
-                'audio_codec': item['audio_codec'] if item['audio_codec'] != None else video_info['streams'][0]['audio_codec'],
+                'audio_res': item['abr'],
+                'audio_codec': item['audio_codec'],
                 'size': stream.filesize,
             }
             video_info['streams'].append(selected_item)
