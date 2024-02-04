@@ -50,39 +50,46 @@ from rest_framework import status
 
 @api_view(['POST'])
 def download_yt_url(request):
-    # Get the 'url' parameter from the request data
     url = request.data.get('url', None)
 
     if not url:
         return Response({'error': 'URL parameter is missing'}, status=status.HTTP_400_BAD_REQUEST)
 
-    # Decode the URL if needed
     decoded_url = unquote(url)
 
     try:
         yt = YouTube(decoded_url)
-        print(yt.age_restricted)
+
         # Extract information from the video and each stream
         video_info = {
             'title': yt.title,
             'channel_name': yt.author,
             'thumbnail_url': yt.thumbnail_url,
             'duration': yt.length,
-            'streams': []
+            'streams': [],
+            'audio_trials':[]
         }
 
+        # Collect streams with audio information
+        # streams_with_audio = [stream for stream in yt.streams if 'abr' in stream.__dict__ == ""]
+        # print(streams_with_audio)
+
+        # default_audio_stream =  next(iter(streams_with_audio), None)
+        # print(default_audio_stream.__dict__['abr'])
+        # streams_with_audio = []
+
         for stream in yt.streams:
-            # Filter streams based on mime_type
-            # if stream.mime_type.startswith('video/mp4') or stream.mime_type.startswith('audio/mp4'):
-            # stream_info = {
-            #     'url': stream.url,
-            #     'itag': stream.itag,
-            #     'mime_type': stream.mime_type,
-            #     'resolution': stream.resolution,
-            #     'audio_res': stream.abr,
-            #     'size': stream.filesize,  # Size of the video
-            # }
             item = stream.__dict__
+            video_info['audio_trials'].append({"url": item['url'],'audio_res': item['abr']} if item['abr'] != None else print("No Audio found"))
+
+
+            # if 'abr' in item == "":
+            #     audio_res = default_audio_stream.abr if default_audio_stream else None
+            #     audio_codec = default_audio_stream.audio_codec if default_audio_stream else None
+            # else:
+            #     audio_res = item['abr']
+            #     audio_codec = item['audio_codec']
+
             selected_item = {
                 'url': item['url'],
                 'itag': item['itag'],
@@ -93,6 +100,7 @@ def download_yt_url(request):
                 'size': stream.filesize,
             }
             video_info['streams'].append(selected_item)
+        # print(streams_with_audio)
 
         return Response(video_info)
 
