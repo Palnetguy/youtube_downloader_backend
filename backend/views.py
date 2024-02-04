@@ -61,7 +61,7 @@ def download_yt_url(request):
 
     try:
         yt = YouTube(decoded_url)
-
+        print(yt.age_restricted)
         # Extract information from the video and each stream
         video_info = {
             'title': yt.title,
@@ -89,6 +89,7 @@ def download_yt_url(request):
                 'mime_type': item['mime_type'],
                 'resolution': item['resolution'],
                 'audio_res': item['abr'],
+                'audio_codec': item['audio_codec'],
                 'size': stream.filesize,
             }
             video_info['streams'].append(selected_item)
