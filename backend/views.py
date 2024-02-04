@@ -67,7 +67,7 @@ def download_yt_url(request):
             'thumbnail_url': yt.thumbnail_url,
             'duration': yt.length,
             'streams': [],
-            'audio_trials':[]
+            # 'audio_trials':[]
         }
 
         # Collect streams with audio information
@@ -80,23 +80,15 @@ def download_yt_url(request):
 
         for stream in yt.streams:
             item = stream.__dict__
-            video_info['audio_trials'].append({"url": item['url'],'audio_res': item['abr']} if item['abr'] != None else print("No Audio found"))
-
-
-            # if 'abr' in item == "":
-            #     audio_res = default_audio_stream.abr if default_audio_stream else None
-            #     audio_codec = default_audio_stream.audio_codec if default_audio_stream else None
-            # else:
-            #     audio_res = item['abr']
-            #     audio_codec = item['audio_codec']
+            # video_info['audio_trials'].append({"url": item['url'],'audio_res': item['abr']} if item['abr'] != None else print(video_info['audio_trials'][0]['audio_res']))
 
             selected_item = {
                 'url': item['url'],
                 'itag': item['itag'],
                 'mime_type': item['mime_type'],
                 'resolution': item['resolution'],
-                'audio_res': item['abr'],
-                'audio_codec': item['audio_codec'],
+                'audio_res': item['abr'] if item['abr'] != None else video_info['streams'][0]['audio_res'],
+                'audio_codec': item['audio_codec'] if item['audio_codec'] != None else video_info['streams'][0]['audio_codec'],
                 'size': stream.filesize,
             }
             video_info['streams'].append(selected_item)
